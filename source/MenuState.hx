@@ -51,6 +51,7 @@ class MenuState extends FlxState
         FlxG.log.add("Server started at port " + localPort);
 
         var hostPort = Std.parseInt(_hostPortInput.text);
-        FlxG.switchState(new PlayState(_playerNameInput.text, _hostIpInput.text, hostPort));
+        Client.getInstance().connect(_hostIpInput.text, hostPort);
+        FlxG.switchState(new PlayState(_playerNameInput.text, _localIpInput.text, localPort));
     }
 }

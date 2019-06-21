@@ -17,10 +17,15 @@ class Client extends FlxSprite
 
     private function new()
     {
+        super();
+    }
+
+    public function connect(serverIp:String, serverPort:Int)
+    {
         _networkClient = Network.registerSession(NetworkMode.CLIENT, 
         {
-            ip: "127.0.0.1",
-            port: 8000,
+            ip: serverIp,
+            port: serverPort,
             flash_policy_file_url: 'http://127.0.0.1:9999/crossdomain.xml'
         });
 
@@ -37,8 +42,6 @@ class Client extends FlxSprite
         });
 
         _networkClient.start();
-
-        super();
     }
 
     private function handlePlayerIngression(event:PlayerIngressedEvent)
