@@ -26,7 +26,7 @@ class Client extends FlxSprite
         {
             ip: serverIp,
             port: serverPort,
-            flash_policy_file_url: 'http://127.0.0.1:9999/crossdomain.xml'
+            flash_policy_file_url: 'http://'+ serverIp +':9999/crossdomain.xml'
         });
 
         _networkClient.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) 
@@ -41,7 +41,7 @@ class Client extends FlxSprite
 			}
         });
 
-        _networkClient.start();
+        _networkClient = _networkClient.start();
     }
 
     private function handlePlayerIngression(event:PlayerIngressedEvent)
@@ -61,8 +61,7 @@ class Client extends FlxSprite
     public function sendIngressRequest(nickname:String, localServerIp:String, localServerPort:Int) 
     {
         var requestEvent = new IngressRequestEvent(nickname, localServerIp, localServerPort);
-        _instance._networkClient.send(requestEvent);
-    
+        _networkClient.send(requestEvent);
         FlxG.log.add("[CLIENT] Requested to ingress server");
     }
 }

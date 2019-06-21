@@ -9,7 +9,7 @@ class Player extends FlxSprite
 {
     public var nickname:String;
     private var _direction:String;
-    private var _velocity:Int = 60;
+    private var _velocity:Int = 200;
 
     private var _isLocal:Bool;
 
@@ -37,7 +37,7 @@ class Player extends FlxSprite
 
         if(FlxG.keys.justReleased.DOWN)
         {
-            this.velocity.y = 0;
+            this.velocity.y -= _velocity;
         }
 
         if(FlxG.keys.justPressed.UP)
@@ -48,7 +48,7 @@ class Player extends FlxSprite
 
         if(FlxG.keys.justReleased.UP)
         {
-            this.velocity.y = 0;
+            this.velocity.y += _velocity;
         }
 
         if(FlxG.keys.justPressed.RIGHT)
@@ -59,7 +59,7 @@ class Player extends FlxSprite
 
         if(FlxG.keys.justReleased.RIGHT)
         {
-            this.velocity.x = 0;
+            this.velocity.x -= _velocity;
         }
 
         if(FlxG.keys.justPressed.LEFT)
@@ -70,7 +70,7 @@ class Player extends FlxSprite
 
         if(FlxG.keys.justReleased.LEFT)
         {
-            this.velocity.x = 0;
+            this.velocity.x += _velocity;
         }
     }
 }
