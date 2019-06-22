@@ -44,10 +44,10 @@ class PlayState extends FlxState
         super.update(e);
     }
 
-    public function sync(players:FlxTypedGroup<Player>)
+    public function sync(player:Player)
     {
-        for(player in players)
-            _players.add(player);
+        player.isLocal = false;
+        _players.add(player);
     }
 
     public function getPlayers():FlxTypedGroup<Player>

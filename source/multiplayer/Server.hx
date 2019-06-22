@@ -76,9 +76,8 @@ class Server extends Sprite
 	{
 		//Synchronize current players with the incoming 
 		var playState = cast(FlxG.state, PlayState);
-		sender.send(new GameSyncEvent(playState.getPlayers()));
-
-		_networkServer.send("Ping");
+		for(p in playState.getPlayers())
+			sender.send(new GameSyncEvent(p));
 
 		//Broadcast new player ingression
 		var ingressedEvent = new PlayerIngressedEvent(event.nickname);

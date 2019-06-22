@@ -4,11 +4,11 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 
 class GameSyncEvent extends GameEvent
 {
-    public var players:FlxTypedGroup<Player>;
+    public var player:Player;
 
-    public function new(players:FlxTypedGroup<Player>) 
+    public function new(player:Player) 
     {
-        this.players = players;
+        this.player = player;
         this.opCode = GameEventTypes.GameSync;
     }
 }

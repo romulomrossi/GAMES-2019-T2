@@ -11,17 +11,17 @@ class Player extends FlxSprite
     private var _direction:String;
     private var _velocity:Int = 200;
 
-    private var _isLocal:Bool;
+    public var isLocal:Bool;
 
     public function new(isLocal:Bool) 
     {
-        _isLocal = isLocal;
+        this.isLocal = isLocal;
         super();
     }
 
     public override function update(e:Float) 
     {
-        if(_isLocal)
+        if(isLocal)
             handleKeyBoard();
 
         super.update(e);

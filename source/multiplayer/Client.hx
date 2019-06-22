@@ -62,7 +62,7 @@ class Client extends FlxSprite
     private function handleGameSync(event:GameSyncEvent)
     {
         var playState = cast(FlxG.state, PlayState);
-        playState.sync(event.players);     
+        playState.sync(event.player);     
     }
 
     public static function getInstance():Client
