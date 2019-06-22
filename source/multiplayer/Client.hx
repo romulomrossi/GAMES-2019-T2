@@ -31,16 +31,23 @@ class Client extends FlxSprite
 
         _networkClient.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) 
         {
-            FlxG.log.add("[CLIENT] Event received from server " + event.data.opCode);            
-			switch (event.data.opCode) 
+            try 
             {
-                case GameEventTypes.PlayerIngressed :
-                    handlePlayerIngression(cast(event.data, PlayerIngressedEvent));
-                case GameEventTypes.GameSync :
-                    handleGameSync(cast(event.data, GameSyncEvent));
-                default :
-                    trace("[CLIENT] Unhandled event type " + event.data.opCode);
-			}
+                FlxG.log.add("[CLIENT] Event received from server " + event.data.opCode);            
+                switch (event.data.opCode) 
+                {
+                    case GameEventTypes.PlayerIngressed :
+                        handlePlayerIngression(cast(event.data, PlayerIngressedEvent));
+                    case GameEventTypes.GameSync :
+                        handleGameSync(cast(event.data, GameSyncEvent));
+                    default :
+                        trace("[CLIENT] Unhandled event type " + event.data.opCode);
+                }
+            }
+            catch(e:String)
+            {
+                FlxG.log.add(event.data + " " + e);
+            }
         });
 
         _networkClient = _networkClient.start();

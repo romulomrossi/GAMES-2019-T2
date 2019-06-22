@@ -1,5 +1,6 @@
 package multiplayer;
 
+import haxe.Timer;
 import networking.sessions.items.ClientObject;
 import networking.sessions.Session;
 import networking.Network;
@@ -75,10 +76,17 @@ class Server extends Sprite
 	{
 		//Synchronize current players with the incoming 
 		var playState = cast(FlxG.state, PlayState);
-		_networkServer.send(new GameSyncEvent(playState.getPlayers()));
+		sender.send(new GameSyncEvent(playState.getPlayers()));
+
+		_networkServer.send("Ping");
 
 		//Broadcast new player ingression
 		var ingressedEvent = new PlayerIngressedEvent(event.nickname);
-		_networkServer.send(ingressedEvent);	
+		for(client in _networkServer.clients)
+		{
+			var success = client.send(ingressedEvent);
+			if(success == false)
+				FlxG.log.add("Failed to send message");
+		}
 	}
 }
