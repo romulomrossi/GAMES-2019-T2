@@ -1,5 +1,6 @@
 package multiplayer;
 
+import networking.sessions.items.ClientObject;
 import networking.sessions.Session;
 import networking.Network;
 import networking.utils.NetworkEvent;
@@ -7,6 +8,7 @@ import networking.utils.NetworkMode;
 import openfl.display.Sprite;
 import flixel.FlxG;
 import multiplayer.gameEvents.*;
+
 
 class Server extends Sprite 
 {
@@ -38,20 +40,21 @@ class Server extends Sprite
 		// When a client is connected...
 		server.addEventListener(NetworkEvent.CONNECTED, function(event:NetworkEvent) 
 		{
+			
 			FlxG.log.add("[SERVER] Client " + event.client.uuid + " ingressed to network");
 		});
 
 		// When recieving a message from a client...
 		server.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event:NetworkEvent) 
 		{
-			FlxG.log.add("[SERVER] Event " + event.data.opCode + " received from " + event.client.uuid);
-
 			try 
 			{
+				FlxG.log.add("[SERVER] Event " + event.data.opCode + " received from " + event.client.uuid);
+				
 				switch (event.data.opCode) 
 				{
 					case GameEventTypes.IngressRequest:
-						handleIngress(cast(event.data, IngressRequestEvent));
+						handleIngress(event.client, cast(event.data, IngressRequestEvent));
 					default:
 						trace("[SERVER] Unhandled event type " + event.data.opCode);
 				}
@@ -67,9 +70,15 @@ class Server extends Sprite
 		_networkServer = server;
 	}
 
-	private function handleIngress(event:IngressRequestEvent):Void 
+	//Handle ingress request
+	private function handleIngress(sender:ClientObject, event:IngressRequestEvent):Void 
 	{
-		var ingressedEvent = new PlayerIngressedEvent(event.nickname, event.serverIp, event.serverPort);
-		_networkServer.send(ingressedEvent);
+		//Synchronize current players with the incoming 
+		var playState = cast(FlxG.state, PlayState);
+		sender.send(new GameSyncEvent(playState.getPlayers()));
+
+		//Broadcast new player ingression
+		var ingressedEvent = new PlayerIngressedEvent(event.nickname);
+		_networkServer.send(ingressedEvent);	
 	}
 }

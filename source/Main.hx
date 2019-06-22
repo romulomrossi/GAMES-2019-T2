@@ -10,6 +10,5 @@ class Main extends Sprite
 	{
 		super();
 		addChild(new FlxGame(320, 240, MenuState));
-		//addChild(Server.getInstance());
 	}
 }

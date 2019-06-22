@@ -6,15 +6,14 @@ class PlayerIngressedEvent extends GameEvent
     public var y:Float;
 
     public var nickname:String;
-    public var serverPort:Int;
-    public var serverIp:String;
 
-    public function new(nickname:String, serverIp:String, serverPort:Int) 
+    public function new(nickname:String) 
     {
         opCode = GameEventTypes.PlayerIngressed;
 
+        x = 50;
+        y = 50;
+
         this.nickname = nickname;
-        this.serverIp = serverIp;
-        this.serverPort = serverPort;
     }    
 }

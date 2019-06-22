@@ -36,6 +36,8 @@ class Client extends FlxSprite
             {
                 case GameEventTypes.PlayerIngressed :
                     handlePlayerIngression(cast(event.data, PlayerIngressedEvent));
+                case GameEventTypes.GameSync :
+                    handleGameSync(cast(event.data, GameSyncEvent));
                 default :
                     trace("[CLIENT] Unhandled event type " + event.data.opCode);
 			}
@@ -50,6 +52,12 @@ class Client extends FlxSprite
         playState.addPlayer(event.nickname, event.x, event.y);        
     }
 
+    private function handleGameSync(event:GameSyncEvent)
+    {
+        var playState = cast(FlxG.state, PlayState);
+        playState.sync(event.players);     
+    }
+
     public static function getInstance():Client
     {
         if(_instance == null)
@@ -58,9 +66,9 @@ class Client extends FlxSprite
         return _instance;
     }
 
-    public function sendIngressRequest(nickname:String, localServerIp:String, localServerPort:Int) 
+    public function sendIngressRequest(nickname:String) 
     {
-        var requestEvent = new IngressRequestEvent(nickname, localServerIp, localServerPort);
+        var requestEvent = new IngressRequestEvent(nickname);
         _networkClient.send(requestEvent);
         FlxG.log.add("[CLIENT] Requested to ingress server");
     }

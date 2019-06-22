@@ -4,4 +4,5 @@ enum GameEventTypes
 {
     IngressRequest;
     PlayerIngressed;
+    GameSync;
 }

@@ -1,6 +1,5 @@
 package;
 
-import haxe.Timer;
 import multiplayer.*;
 import flixel.ui.FlxButton;
 import flixel.FlxState;
@@ -54,6 +53,6 @@ class MenuState extends FlxState
         var hostPort = Std.parseInt(_hostPortInput.text);
         Client.getInstance().connect(_hostIpInput.text, hostPort);
         Sys.sleep(.5); //This sheat does not fucking work without (wtf!?)
-        FlxG.switchState(new PlayState(_playerNameInput.text, _localIpInput.text, localPort));
+        FlxG.switchState(new PlayState(_playerNameInput.text));
     }
 }

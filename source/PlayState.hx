@@ -1,7 +1,6 @@
 package;
 
 import flixel.group.FlxGroup.FlxTypedGroup;
-import haxe.macro.Expr.Catch;
 import multiplayer.Client;
 import flixel.FlxState;
 import flixel.FlxG;
@@ -13,7 +12,7 @@ class PlayState extends FlxState
 
     var _localPlayerNickname:String;
 
-    public function new(nickname:String, localIp:String, localPort:Int)
+    public function new(nickname:String)
     {
         _players = new FlxTypedGroup<Player>();
         _localPlayerNickname = nickname;
@@ -21,7 +20,7 @@ class PlayState extends FlxState
         try
         {
             _mpClient = Client.getInstance();
-            _mpClient.sendIngressRequest(nickname, localIp, localPort);
+            _mpClient.sendIngressRequest(nickname);
         }
         catch(s:String)
         {
@@ -43,6 +42,17 @@ class PlayState extends FlxState
 
 
         super.update(e);
+    }
+
+    public function sync(players:FlxTypedGroup<Player>)
+    {
+        for(player in players)
+            _players.add(player);
+    }
+
+    public function getPlayers():FlxTypedGroup<Player>
+    {
+        return _players;
     }
 
     public function addPlayer(nickname:String, x:Float, y:Float)
