@@ -1,75 +1,66 @@
 package;
+import flixel.util.FlxColor;
+import flixel.FlxObject;
+import flixel.math.FlxPoint;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.input.keyboard.FlxKeyboard;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
 class Player extends FlxSprite
 {
-    private var _direction:String;
+    private var _direction:Int;
     private var _velocity:Int;
 
     private var _bullets:FlxTypedGroup<Bullet>;
 
     public function new()
     {
-        _direction = "RIGHT";
-        _velocity = 100;    
-
         super();
+        _direction = FlxObject.RIGHT;
+        _velocity = 200;    
+        this.health = 50;
+        this.x = Std.random(FlxG.width);
+        this.y = Std.random(FlxG.height);
+        loadGraphic(AssetPaths.ship__png, false, 32, 32);   
+        setFacingFlip(FlxObject.RIGHT, true, true);
+        setFacingFlip(FlxObject.LEFT, true, true);
+        setFacingFlip(FlxObject.UP, true, false);    
+        setFacingFlip(FlxObject.DOWN, true, false);    
+        
     }
 
     override public function update(e:Float) 
     {
-        handleKeyBoard();
 
         super.update(e);
     }
 
-    private function handleKeyBoard()
+    public function startMoving(direction:Int) 
     {
-        if(FlxG.keys.justPressed.DOWN)
+        this.facing = direction;
+
+        switch(direction)
         {
-            this.velocity.y = _velocity;
-            _direction = "DOWN";  
+            case FlxObject.UP:
+                this.velocity.y = -_velocity;
+                this.velocity.x = 0;
+            case FlxObject.DOWN:
+                this.velocity.y = _velocity;
+                this.velocity.x = 0;
+            case FlxObject.RIGHT:
+                this.velocity.x = _velocity;
+                this.velocity.y = 0;
+            case FlxObject.LEFT:
+                this.velocity.x = -_velocity;                
+                this.velocity.y = 0;
+            default:
+                FlxG.log.add("Invalid direction received");
         }    
+    }
 
-        if(FlxG.keys.justReleased.DOWN)
-        {
-            this.velocity.y -= _velocity;
-        }
-
-        if(FlxG.keys.justPressed.UP)
-        {
-            this.velocity.y = -_velocity;
-            _direction = "UP";  
-        }    
-
-        if(FlxG.keys.justReleased.UP)
-        {
-            this.velocity.y += _velocity;
-        }
-
-        if(FlxG.keys.justPressed.RIGHT)
-        {
-            this.velocity.x = _velocity;
-            _direction = "RIGHT";  
-        }    
-
-        if(FlxG.keys.justReleased.RIGHT)
-        {
-            this.velocity.x -= _velocity;
-        }
-
-        if(FlxG.keys.justPressed.LEFT)
-        {
-            this.velocity.x = -_velocity;
-            _direction = "LEFT";  
-        }    
-
-        if(FlxG.keys.justReleased.LEFT)
-        {
-            this.velocity.x += _velocity;
-        }
+    public function stopMoving()
+    {
+        this.velocity.x = 0;
+        this.velocity.y = 0;    
     }
 }
